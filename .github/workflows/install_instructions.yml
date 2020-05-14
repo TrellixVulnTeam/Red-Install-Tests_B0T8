@@ -1,0 +1,88 @@
+name: Test install instructions
+
+on: push
+
+jobs:
+  install:
+    strategy:
+      matrix:
+        include:
+          # Arch Linux
+          - container: archlinux:latest
+            run: >-
+              cat /etc/*release
+
+          # CentOS
+          - container: centos:7
+            # End of Full Updates - Q4 2020
+            run: >-
+              cat /etc/*release
+          - container: centos:8
+            # End of Full Updates - 2024-05
+            run: >-
+              cat /etc/*release
+
+          # Debian
+          - container: debian:stretch
+            # EOL ~2020
+            run: >-
+              cat /etc/*release
+          - container: debian:buster
+            # EOL ~2022
+            run: >-
+              cat /etc/*release
+
+          # Fedora
+          - container: fedora:30
+            # End of Life - 2020-05-26
+            run: >-
+              cat /etc/*release
+          - container: fedora:31
+            # End of Life - 2020-11-17
+            run: >-
+              cat /etc/*release
+          - container: fedora:32
+            # End of Life - 2021-05-18
+            run: >-
+              cat /etc/*release
+
+          # openSUSE
+          - container: opensuse/leap:15.1
+            # End of Life (planned) - 2020-11-30
+            run: >-
+              cat /etc/*release
+          - container: opensuse/tumbleweed:latest
+            run: >-
+              cat /etc/*release
+
+          # Ubuntu
+          - container: ubuntu:16.04
+            # End of Standard Support - 2021-04-21
+            run: >-
+              cat /etc/*release
+          - container: ubuntu:18.04
+            # End of Standard Support - 2023-04-26
+            run: >-
+              cat /etc/*release
+          - container: ubuntu:20.04
+            # End of Standard Support - 2025-04-23
+            run: >-
+              cat /etc/*release
+          - container: ubuntu:devel
+            run: >-
+              cat /etc/*release
+
+          # Windows
+          - os: windows-latest
+            run: >-
+              systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
+
+          # macOS
+          - os: macos-latest
+            run: >-
+              sw_vers
+    runs-on: ${{ matrix.os || 'ubuntu-latest' }}
+    container: ${{ matrix.container }}
+    steps:
+      - name: Run install instructions
+        run: ${{ matrix.run }}
