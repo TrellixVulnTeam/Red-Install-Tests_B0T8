@@ -76,7 +76,8 @@ jobs:
             # End of Life (planned) - 2020-11-30
             run: |-
               source /etc/os-release
-              zypper -n --gpg-auto-import-keys ar -f https://download.opensuse.org/repositories/home:/Rotkraut:/Opt-Python/openSUSE_Leap_${VERSION_ID}/ Opt-Python
+              zypper -n ar -f https://download.opensuse.org/repositories/home:/Rotkraut:/Opt-Python/openSUSE_Leap_${VERSION_ID}/ Opt-Python
+              zypper -n ref --gpg-auto-import-keys
 
               zypper -n install opt-python38 opt-python38-setuptools git-core java-11-openjdk-headless
               zypper -n install -t pattern devel_basis
