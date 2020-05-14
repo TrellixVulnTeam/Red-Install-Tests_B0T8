@@ -188,9 +188,9 @@ jobs:
           echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.profile
           source ~/.profile
 
-          CONFIGURE_OPTS=--enable-optimizations pyenv install 3.8.2 -v
+          CONFIGURE_OPTS=--enable-optimizations pyenv install 3.8.3 -v
 
-          pyenv global 3.8.2
+          pyenv global 3.8.3
 
       # Making a virtual environment and installing Red
       - name: Make a virtual environment (pyenv virtualenv)
