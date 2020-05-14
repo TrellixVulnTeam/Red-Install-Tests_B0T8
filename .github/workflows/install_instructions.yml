@@ -10,17 +10,21 @@ jobs:
         include:
           # Arch Linux
           - container: archlinux:latest
+            # using `--noconfirm` in CI-only
             run: |-
-              pacman -Syu python python-pip git jre11-openjdk-headless base-devel
+              pacman --noconfirm -Syu python python-pip git jre11-openjdk-headless base-devel
 
           # CentOS
           - container: centos:7
             # End of Full Updates - Q4 2020
             run: |-
+              yum -y install https://repo.ius.io/ius-release-el7.rpm
+              yum install -y yum-plugin-replace
+              yum replace -y git --replace-with git2u
+
               yum -y groupinstall development
-              yum -y install https://centos7.iuscommunity.org/ius-release.rpm
               yum -y install zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel \
-                openssl-devel xz xz-devel libffi-devel findutils git2u java-11-openjdk-headless
+                openssl-devel xz xz-devel libffi-devel findutils java-11-openjdk-headless
             use_pyenv: true
           - container: centos:8
             # End of Full Updates - 2024-05
@@ -72,7 +76,7 @@ jobs:
             # End of Life (planned) - 2020-11-30
             run: |-
               source /etc/os-release
-              zypper -n ar -f https://download.opensuse.org/repositories/home:/Rotkraut:/Opt-Python/openSUSE_Leap_${VERSION_ID}/ Opt-Python
+              zypper -n --gpg-auto-import-keys ar -f https://download.opensuse.org/repositories/home:/Rotkraut:/Opt-Python/openSUSE_Leap_${VERSION_ID}/ Opt-Python
 
               zypper -n install opt-python38 opt-python38-setuptools git-core java-11-openjdk-headless
               zypper -n install -t pattern devel_basis
@@ -122,6 +126,10 @@ jobs:
                 build-essential
           - container: ubuntu:devel
             run: |-
+              apt update
+              apt -y install software-properties-common
+              add-apt-repository -yu ppa:git-core/ppa
+
               apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
                 libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev \
                 libxmlsec1-dev libffi-dev liblzma-dev libgdbm-dev uuid-dev python3-openssl git openjdk-11-jre-headless
@@ -149,6 +157,7 @@ jobs:
               source ~/.profile
               brew install git
               brew cask install adoptopenjdk/openjdk/adoptopenjdk11
+            use_pyenv: true
 
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
     container: ${{ matrix.container }}
@@ -175,14 +184,14 @@ jobs:
           pyenv shell redbot
 
       - name: Make a virtual environment (venv on Linux/Mac)
-        if: ${{ !matrix.use_pyenv && runner.os != 'windows-latest' }}
+        if: ${{ !matrix.use_pyenv && runner.os != 'Windows' }}
         run: |-
           python3.8 -m venv ~/redenv
 
           source ~/redenv/bin/activate
 
       - name: Make a virtual environment (venv on Windows)
-        if: ${{ runner.os == 'windows-latest' }}
+        if: ${{ runner.os == 'Windows' }}
         shell: cmd
         run: |-
           py -3.8 -m venv "%userprofile%\redenv"
@@ -191,7 +200,7 @@ jobs:
 
       # Installing Red
       - name: Install Red
-        shell: cmd
+        shell: ${{ runner.os == 'Windows' && 'cmd' || '' }}
         run: |-
           python -m pip install -U pip setuptools wheel
           python -m pip install -U Red-DiscordBot[postgres]
