@@ -160,16 +160,24 @@ jobs:
 
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
     container: ${{ matrix.container }}
-    env:
-      INSTALL_RED_SHELL: ${{ (matrix.os == 'windows-latest' && 'cmd') || '' }}
     steps:
       # Installing requirements
-      - name: Run install instructions
+      - name: Run install instructions (Linux/Mac)
         run: ${{ matrix.run }}
+        if: >-
+          runner.os != 'Windows'
+        shell: bash
+
+      - name: Run install instructions (Windows)
+        run: ${{ matrix.run }}
+        if: >-
+          runner.os == 'Windows'
+        shell: cmd
 
       - name: Install Python with pyenv
         if: >-
           matrix.use_pyenv
+        shell: bash
         # `echo` commands are CI-only - users have to add those lines on their own
         run: |-
           command -v pyenv && pyenv update || curl https://pyenv.run | bash
@@ -187,6 +195,7 @@ jobs:
       - name: Make a virtual environment (pyenv virtualenv)
         if: >-
           matrix.use_pyenv
+        shell: bash
         run: |-
           pyenv virtualenv redbot
 
@@ -198,6 +207,7 @@ jobs:
       - name: Install Red inside venv (Linux/Mac)
         if: >-
           !matrix.use_pyenv && runner.os != 'Windows'
+        shell: bash
         run: |-
           python3.8 -m venv ~/redenv
 
