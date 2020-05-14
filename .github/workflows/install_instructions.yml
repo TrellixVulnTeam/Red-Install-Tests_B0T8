@@ -5,6 +5,7 @@ on: push
 jobs:
   install:
     strategy:
+      fail-fast: false
       matrix:
         include:
           # Arch Linux
