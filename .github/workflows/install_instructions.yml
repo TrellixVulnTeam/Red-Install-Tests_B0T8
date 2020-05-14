@@ -182,7 +182,7 @@ jobs:
         run: |-
           command -v pyenv && pyenv update || curl https://pyenv.run | bash
 
-          echo 'export PATH="/github/home/.pyenv/bin:$PATH"' >> ~/.profile
+          echo 'export PATH="'$HOME'/.pyenv/bin:$PATH"' >> ~/.profile
           echo 'eval "$(pyenv init -)"' >> ~/.profile
           echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.profile
           source ~/.profile
