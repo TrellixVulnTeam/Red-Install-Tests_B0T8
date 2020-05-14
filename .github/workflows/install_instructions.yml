@@ -157,7 +157,6 @@ jobs:
               source ~/.profile
               brew install git
               brew cask install adoptopenjdk/openjdk/adoptopenjdk11
-            use_pyenv: true
 
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
     container: ${{ matrix.container }}
