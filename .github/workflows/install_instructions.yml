@@ -18,13 +18,13 @@ jobs:
           - container: centos:7
             # End of Full Updates - Q4 2020
             run: |-
-              yum -y install https://repo.ius.io/ius-release-el7.rpm
-              yum -y install yum-plugin-replace
-              command -v git && yum -y replace git --replace-with git2u || yum -y install git2u
-
               yum -y groupinstall development
               yum -y install zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel \
                 openssl-devel xz xz-devel libffi-devel findutils java-11-openjdk-headless
+
+              yum -y install https://repo.ius.io/ius-release-el7.rpm
+              yum -y install yum-plugin-replace
+              yum -y replace git --replace-with git2u
             use_pyenv: true
           - container: centos:8
             # End of Full Updates - 2024-05
