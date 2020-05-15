@@ -17,10 +17,14 @@ jobs:
           # CentOS
           - container: centos:7
             # End of Full Updates - Q4 2020
+            # using `.profile` over `.bashrc` in CI-only
             run: |-
               yum -y groupinstall development
               yum -y install zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel \
                 openssl-devel xz xz-devel tk-devel libffi-devel findutils java-11-openjdk-headless
+              yum -y install centos-release-scl
+              yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++
+              echo "source scl_source enable devtoolset-8" >> ~/.profile
 
               yum -y install https://repo.ius.io/ius-release-el7.rpm
               yum -y install yum-plugin-replace
