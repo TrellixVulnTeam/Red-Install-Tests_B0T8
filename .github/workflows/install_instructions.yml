@@ -166,7 +166,7 @@ jobs:
         run: ${{ matrix.run }}
         if: >-
           runner.os != 'Windows'
-        shell: bash
+        shell: bash -leo pipefail {0}
 
       - name: Run install instructions (Windows)
         run: ${{ matrix.run }}
@@ -177,7 +177,7 @@ jobs:
       - name: Install Python with pyenv
         if: >-
           matrix.use_pyenv
-        shell: bash
+        shell: bash -leo pipefail {0}
         # `echo` commands are CI-only - users have to add those lines on their own
         run: |-
           command -v pyenv && pyenv update || curl https://pyenv.run | bash
@@ -195,7 +195,7 @@ jobs:
       - name: Make a virtual environment (pyenv virtualenv)
         if: >-
           matrix.use_pyenv
-        shell: bash
+        shell: bash -leo pipefail {0}
         run: |-
           pyenv virtualenv redbot
 
@@ -207,7 +207,7 @@ jobs:
       - name: Install Red inside venv (Linux/Mac)
         if: >-
           !matrix.use_pyenv && runner.os != 'Windows'
-        shell: bash
+        shell: bash -leo pipefail {0}
         run: |-
           python3.8 -m venv ~/redenv
 
