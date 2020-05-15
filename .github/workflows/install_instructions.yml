@@ -129,7 +129,9 @@ jobs:
 
               apt -y install python3.8 python3.8-dev python3.8-venv python3-pip git openjdk-11-jre-headless \
                 build-essential
-          - container: ubuntu:devel
+          - container: ubuntu:19.10
+            # Latest non-LTS Ubuntu
+            # End of Life - 2020-07-17
             run: |-
               apt update
               apt -y install software-properties-common
