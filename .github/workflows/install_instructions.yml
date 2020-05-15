@@ -168,6 +168,8 @@ jobs:
 
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
     container: ${{ matrix.container }}
+    env:
+      DEBIAN_FRONTEND: noninteractive
     steps:
       # Installing requirements
       - name: Run install instructions (Linux/Mac)
