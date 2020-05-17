@@ -1,6 +1,9 @@
 name: Test install instructions
 
-on: push
+on:
+  push:
+  schedule:
+    - cron: '5 16 * * *'
 
 jobs:
   install:
