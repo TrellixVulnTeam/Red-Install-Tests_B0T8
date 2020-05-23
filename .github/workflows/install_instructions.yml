@@ -1,0 +1,26 @@
+name: Test install instructions
+
+on:
+  push:
+  schedule:
+    - cron: '5 16 * * *'
+
+jobs:
+  install:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Windows
+          - os: windows-latest
+            run: |-
+              docker --version
+              docker run mcr.microsoft.com/windows/servercore:ltsc2019
+    runs-on: ${{ matrix.os }}
+    steps:
+      # Installing requirements
+      - name: Run install instructions (Windows)
+        run: ${{ matrix.run }}
+        if: >-
+          runner.os == 'Windows'
+        shell: powershell
