@@ -185,7 +185,7 @@ jobs:
         run: ${{ matrix.run }}
         if: >-
           runner.os == 'Windows'
-        shell: cmd
+        shell: powershell
 
       - name: Install Python with pyenv
         if: >-
