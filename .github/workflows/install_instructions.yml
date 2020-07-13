@@ -14,8 +14,13 @@ jobs:
           # Windows
           - os: windows-latest
             run: |-
-              docker --version
-              docker run mcr.microsoft.com/windows/servercore:ltsc2019
+              Set-ExecutionPolicy Bypass -Scope Process -Force
+              iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+              choco upgrade git --params "/GitOnlyOnPath /WindowsTerminal" -y
+              choco upgrade visualstudio2019-workload-vctools -y
+              choco upgrade python3 -y
+              choco upgrade adoptopenjdk11jre -y
+
     runs-on: ${{ matrix.os }}
     steps:
       # Installing requirements
@@ -23,4 +28,4 @@ jobs:
         run: ${{ matrix.run }}
         if: >-
           runner.os == 'Windows'
-        shell: powershell
+        shell: docker run mcr.microsoft.com/windows/servercore:ltsc2019 powershell -command "& '{0}'"
