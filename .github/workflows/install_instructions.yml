@@ -20,6 +20,8 @@ jobs:
           # CentOS
           - container: centos:7
             # End of Full Updates - Q4 2020
+            # https://wiki.centos.org/About/Product
+            #
             # using `.profile` over `.bashrc` in CI-only
             # skipping `source .profile` as it's ran by bash automatically in next step
             run: |-
@@ -35,6 +37,8 @@ jobs:
             use_pyenv: true
           - container: centos:8
             # End of Full Updates - 2024-05
+            # https://wiki.centos.org/About/Product
+            #
             run: |-
               yum -y install epel-release
               yum -y update
@@ -44,18 +48,10 @@ jobs:
             use_pyenv: true
 
           # Debian
-          - container: debian:stretch
-            # EOL ~2020
-            run: |-
-              echo "deb http://deb.debian.org/debian stretch-backports main" >> /etc/apt/sources.list.d/red-sources.list
-              apt update
-              apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
-                libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev \
-                libffi-dev liblzma-dev libgdbm-dev uuid-dev python3-openssl git openjdk-11-jre-headless
-              CXX=/usr/bin/g++
-            use_pyenv: true
           - container: debian:buster
             # EOL ~2022
+            # https://wiki.debian.org/DebianReleases#Production_Releases
+            #
             run: |-
               apt update
               apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
@@ -65,22 +61,40 @@ jobs:
             use_pyenv: true
 
           # Fedora
-          - container: fedora:30
-            # End of Life - 2020-05-26
-            run: |-
-              dnf -y install python38 git java-11-openjdk-headless @development-tools
           - container: fedora:31
             # End of Life - 2020-11-17
+            # https://fedoraproject.org/wiki/Fedora_Release_Life_Cycle#Maintenance_Schedule
+            #
             run: |-
               dnf -y install python38 git java-11-openjdk-headless @development-tools
           - container: fedora:32
             # End of Life - 2021-05-18
+            # https://fedoraproject.org/wiki/Fedora_Release_Life_Cycle#Maintenance_Schedule
+            #
             run: |-
               dnf -y install python38 git java-11-openjdk-headless @development-tools
 
           # openSUSE
           - container: opensuse/leap:15.1
             # End of Life (planned) - 2020-11-30
+            # https://en.opensuse.org/Lifetime#openSUSE_Leap
+            #
+            run: |-
+              source /etc/os-release
+              zypper -n ar -f https://download.opensuse.org/repositories/home:/Rotkraut:/Opt-Python/openSUSE_Leap_${VERSION_ID}/ Opt-Python
+              zypper -n --gpg-auto-import-keys ref
+
+              zypper -n install opt-python38 opt-python38-setuptools git-core java-11-openjdk-headless
+              zypper -n install -t pattern devel_basis
+
+              echo 'export PATH="/opt/python/bin:$PATH"' | tee /etc/profile.d/opt-python.sh
+              source /etc/profile.d/opt-python.sh
+
+              /opt/python/bin/easy_install-3.8 pip
+          - container: opensuse/leap:15.2
+            # End of Life (planned) - 2021-12-31
+            # https://en.opensuse.org/Lifetime#openSUSE_Leap
+            #
             run: |-
               source /etc/os-release
               zypper -n ar -f https://download.opensuse.org/repositories/home:/Rotkraut:/Opt-Python/openSUSE_Leap_${VERSION_ID}/ Opt-Python
@@ -101,6 +115,8 @@ jobs:
           # Ubuntu
           - container: ubuntu:16.04
             # End of Standard Support - 2021-04-21
+            # https://wiki.ubuntu.com/Releases#Current
+            #
             run: |-
               apt update
               apt -y install software-properties-common
@@ -114,6 +130,8 @@ jobs:
                 build-essential
           - container: ubuntu:18.04
             # End of Standard Support - 2023-04-26
+            # https://wiki.ubuntu.com/Releases#Current
+            #
             run: |-
               apt update
               apt -y install software-properties-common
@@ -125,6 +143,8 @@ jobs:
                 build-essential
           - container: ubuntu:20.04
             # End of Standard Support - 2025-04-23
+            # https://wiki.ubuntu.com/Releases#Current
+            #
             run: |-
               apt update
               apt -y install software-properties-common
@@ -135,6 +155,8 @@ jobs:
           - container: ubuntu:19.10
             # Latest non-LTS Ubuntu
             # End of Life - 2020-07-17
+            # https://wiki.ubuntu.com/Releases#Current
+            #
             run: |-
               apt update
               apt -y install software-properties-common
