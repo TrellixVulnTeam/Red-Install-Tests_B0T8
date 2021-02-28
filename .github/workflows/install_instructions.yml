@@ -148,7 +148,7 @@ jobs:
               echo 'export PATH="/usr/local/opt/python@3.8/bin:$PATH"' >> ~/.bash_profile
               source ~/.bash_profile
               brew install git
-              brew cask install adoptopenjdk/openjdk/adoptopenjdk11
+              brew install --cask adoptopenjdk/openjdk/adoptopenjdk11
 
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
     container: ${{ matrix.container }}
