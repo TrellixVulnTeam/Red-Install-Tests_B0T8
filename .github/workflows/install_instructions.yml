@@ -90,7 +90,7 @@ jobs:
               /opt/python/bin/easy_install-3.8 pip
           - container: opensuse/tumbleweed:latest
             run: |-
-              zypper -n install python3-base python3-pip git-core java-11-openjdk-headless
+              zypper -n install python38-base python38-pip git-core java-11-openjdk-headless
               zypper -n install -t pattern devel_basis
 
           - container: ubuntu:18.04
