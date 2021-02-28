@@ -57,37 +57,21 @@ jobs:
               CXX=/usr/bin/g++
             use_pyenv: true
 
-          # Fedora
-          - container: fedora:31
-            # End of Life - 2020-11-17
-            # https://fedoraproject.org/wiki/Fedora_Release_Life_Cycle#Maintenance_Schedule
+          # https://fedoraproject.org/wiki/Fedora_Release_Life_Cycle#Maintenance_Schedule
+          - container: fedora:32
+            # End of Life - 2021-05-18
+            # https://fedorapeople.org/groups/schedule/f-34/f-34-all-tasks.html
             #
             run: |-
               dnf -y install python38 git java-11-openjdk-headless @development-tools
-          - container: fedora:32
-            # End of Life - 2021-05-18
-            # https://fedoraproject.org/wiki/Fedora_Release_Life_Cycle#Maintenance_Schedule
+          - container: fedora:33
+            # End of Life - 2021-11-16
+            # https://fedorapeople.org/groups/schedule/f-35/f-35-all-tasks.html
             #
             run: |-
               dnf -y install python38 git java-11-openjdk-headless @development-tools
 
           # openSUSE
-          - container: opensuse/leap:15.1
-            # End of Life (planned) - 2020-11-30
-            # https://en.opensuse.org/Lifetime#openSUSE_Leap
-            #
-            run: |-
-              source /etc/os-release
-              zypper -n ar -f https://download.opensuse.org/repositories/home:/Rotkraut:/Opt-Python/openSUSE_Leap_${VERSION_ID}/ Opt-Python
-              zypper -n --gpg-auto-import-keys ref
-
-              zypper -n install opt-python38 opt-python38-setuptools git-core java-11-openjdk-headless
-              zypper -n install -t pattern devel_basis
-
-              echo 'export PATH="/opt/python/bin:$PATH"' | tee /etc/profile.d/opt-python.sh
-              source /etc/profile.d/opt-python.sh
-
-              /opt/python/bin/easy_install-3.8 pip
           - container: opensuse/leap:15.2
             # End of Life (planned) - 2021-12-31
             # https://en.opensuse.org/Lifetime#openSUSE_Leap
