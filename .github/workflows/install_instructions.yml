@@ -27,8 +27,7 @@ jobs:
             # skipping `source .profile` as it's ran by bash automatically in next step
             run: |-
               yum -y groupinstall development
-              yum -y install zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel \
-                openssl-devel xz xz-devel tk-devel libffi-devel findutils java-11-openjdk-headless
+              yum -y install zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel xz xz-devel tk-devel libffi-devel findutils java-11-openjdk-headless
               yum -y install centos-release-scl
               yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++
               echo "source scl_source enable devtoolset-8" >> ~/.profile
@@ -44,8 +43,7 @@ jobs:
               yum -y install epel-release
               yum -y update
               yum -y groupinstall development
-              yum -y install git zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel \
-                openssl-devel xz xz-devel tk-devel libffi-devel findutils java-11-openjdk-headless
+              yum -y install git zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel xz xz-devel tk-devel libffi-devel findutils java-11-openjdk-headless
             use_pyenv: true
 
           # Debian
@@ -55,9 +53,7 @@ jobs:
             #
             run: |-
               apt update
-              apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
-                libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev \
-                libffi-dev liblzma-dev libgdbm-dev uuid-dev python3-openssl git openjdk-11-jre-headless
+              apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev libgdbm-dev uuid-dev python3-openssl git openjdk-11-jre-headless
               CXX=/usr/bin/g++
             use_pyenv: true
 
@@ -140,8 +136,7 @@ jobs:
 
               add-apt-repository -y ppa:deadsnakes/ppa
 
-              apt -y install python3.8 python3.8-dev python3.8-venv python3-pip git openjdk-11-jre-headless \
-                build-essential
+              apt -y install python3.8 python3.8-dev python3.8-venv python3-pip git openjdk-11-jre-headless build-essential
           - container: ubuntu:20.04
             # End of Standard Support - 2025-04-23
             # https://wiki.ubuntu.com/Releases#Current
@@ -151,8 +146,7 @@ jobs:
               apt -y install software-properties-common
               add-apt-repository -y ppa:git-core/ppa
 
-              apt -y install python3.8 python3.8-dev python3.8-venv python3-pip git openjdk-11-jre-headless \
-                build-essential
+              apt -y install python3.8 python3.8-dev python3.8-venv python3-pip git openjdk-11-jre-headless build-essential
           - container: ubuntu:19.10
             # Latest non-LTS Ubuntu
             # End of Life - 2020-07-17
@@ -163,9 +157,7 @@ jobs:
               apt -y install software-properties-common
               add-apt-repository -yu ppa:git-core/ppa
 
-              apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
-                libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev \
-                libxmlsec1-dev libffi-dev liblzma-dev libgdbm-dev uuid-dev python3-openssl git openjdk-11-jre-headless
+              apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev libgdbm-dev uuid-dev python3-openssl git openjdk-11-jre-headless
               CXX=/usr/bin/g++
             use_pyenv: true
 
