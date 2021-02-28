@@ -109,22 +109,6 @@ jobs:
               zypper -n install python3-base python3-pip git-core java-11-openjdk-headless
               zypper -n install -t pattern devel_basis
 
-          # Ubuntu
-          - container: ubuntu:16.04
-            # End of Standard Support - 2021-04-21
-            # https://wiki.ubuntu.com/Releases#Current
-            #
-            run: |-
-              apt update
-              apt -y install software-properties-common
-              add-apt-repository -yu ppa:openjdk-r/ppa
-
-              add-apt-repository -yu ppa:git-core/ppa
-
-              add-apt-repository -yu ppa:deadsnakes/ppa
-
-              apt -y install python3.8 python3.8-dev python3.8-venv python3-pip git openjdk-11-jre-headless \
-                build-essential
           - container: ubuntu:18.04
             # End of Standard Support - 2023-04-26
             # https://wiki.ubuntu.com/Releases#Current
