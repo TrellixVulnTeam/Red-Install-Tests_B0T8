@@ -20,7 +20,7 @@ jobs:
 
           # CentOS
           - container: centos:7
-            # End of Full Updates - Q4 2020
+            # End of Maintenance Updates - 2024-06-30
             # https://wiki.centos.org/About/Product
             #
             # using `.profile` over `.bashrc` in CI-only
@@ -36,7 +36,7 @@ jobs:
               yum -y swap git git224
             use_pyenv: true
           - container: centos:8
-            # End of Full Updates - 2024-05
+            # End of Maintenance Updates - 2021-12-31
             # https://wiki.centos.org/About/Product
             #
             run: |-
