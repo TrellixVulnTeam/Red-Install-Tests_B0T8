@@ -16,7 +16,7 @@ jobs:
           - container: archlinux:latest
             # using `--noconfirm` in CI-only
             run: |-
-              pacman --noconfirm -Syu python python-pip git jre11-openjdk-headless base-devel
+              pacman --noconfirm -Syu python python-pip git jre11-openjdk-headless base-devel nano
 
           # CentOS
           - container: centos:7
@@ -27,7 +27,7 @@ jobs:
             # skipping `source .profile` as it's ran by bash automatically in next step
             run: |-
               yum -y groupinstall development
-              yum -y install zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel xz xz-devel tk-devel libffi-devel findutils java-11-openjdk-headless
+              yum -y install zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel xz xz-devel tk-devel libffi-devel findutils java-11-openjdk-headless nano
               yum -y install centos-release-scl
               yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++
               echo "source scl_source enable devtoolset-8" >> ~/.profile
@@ -43,7 +43,7 @@ jobs:
               yum -y install epel-release
               yum -y update
               yum -y groupinstall development
-              yum -y install git zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel xz xz-devel tk-devel libffi-devel findutils java-11-openjdk-headless
+              yum -y install git zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel xz xz-devel tk-devel libffi-devel findutils java-11-openjdk-headless nano
             use_pyenv: true
 
           # Debian
@@ -53,7 +53,7 @@ jobs:
             #
             run: |-
               apt update
-              apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev libgdbm-dev uuid-dev python3-openssl git openjdk-11-jre-headless
+              apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev libgdbm-dev uuid-dev python3-openssl git openjdk-11-jre-headless nano
               CXX=/usr/bin/g++
             use_pyenv: true
 
@@ -63,13 +63,13 @@ jobs:
             # https://fedorapeople.org/groups/schedule/f-34/f-34-all-tasks.html
             #
             run: |-
-              dnf -y install python38 git java-11-openjdk-headless @development-tools
+              dnf -y install python38 git java-11-openjdk-headless @development-tools nano
           - container: fedora:33
             # End of Life - 2021-11-16
             # https://fedorapeople.org/groups/schedule/f-35/f-35-all-tasks.html
             #
             run: |-
-              dnf -y install python38 git java-11-openjdk-headless @development-tools
+              dnf -y install python38 git java-11-openjdk-headless @development-tools nano
 
           # openSUSE
           - container: opensuse/leap:15.2
@@ -81,7 +81,7 @@ jobs:
               zypper -n ar -f https://download.opensuse.org/repositories/home:/Rotkraut:/Opt-Python/openSUSE_Leap_${VERSION_ID}/ Opt-Python
               zypper -n --gpg-auto-import-keys ref
 
-              zypper -n install opt-python38 opt-python38-setuptools git-core java-11-openjdk-headless
+              zypper -n install opt-python38 opt-python38-setuptools git-core java-11-openjdk-headless nano
               zypper -n install -t pattern devel_basis
 
               echo 'export PATH="/opt/python/bin:$PATH"' | tee /etc/profile.d/opt-python.sh
@@ -90,7 +90,7 @@ jobs:
               /opt/python/bin/easy_install-3.8 pip
           - container: opensuse/tumbleweed:latest
             run: |-
-              zypper -n install python38-base python38-pip git-core java-11-openjdk-headless
+              zypper -n install python38-base python38-pip git-core java-11-openjdk-headless nano
               zypper -n install -t pattern devel_basis
 
           - container: ubuntu:18.04
@@ -104,7 +104,7 @@ jobs:
 
               add-apt-repository -y ppa:deadsnakes/ppa
 
-              apt -y install python3.8 python3.8-dev python3.8-venv python3-pip git openjdk-11-jre-headless build-essential
+              apt -y install python3.8 python3.8-dev python3.8-venv python3-pip git openjdk-11-jre-headless build-essential nano
           - container: ubuntu:20.04
             # End of Standard Support - 2025-04-23
             # https://wiki.ubuntu.com/Releases#Current
@@ -114,7 +114,7 @@ jobs:
               apt -y install software-properties-common
               add-apt-repository -y ppa:git-core/ppa
 
-              apt -y install python3.8 python3.8-dev python3.8-venv python3-pip git openjdk-11-jre-headless build-essential
+              apt -y install python3.8 python3.8-dev python3.8-venv python3-pip git openjdk-11-jre-headless build-essential nano
           - container: ubuntu:latest
             # Latest non-LTS Ubuntu
             #
@@ -123,7 +123,7 @@ jobs:
               apt -y install software-properties-common
               add-apt-repository -yu ppa:git-core/ppa
 
-              apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev libgdbm-dev uuid-dev python3-openssl git openjdk-11-jre-headless
+              apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev libgdbm-dev uuid-dev python3-openssl git openjdk-11-jre-headless nano
               CXX=/usr/bin/g++
             use_pyenv: true
 
