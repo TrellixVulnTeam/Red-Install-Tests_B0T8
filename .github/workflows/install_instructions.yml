@@ -115,7 +115,7 @@ jobs:
               add-apt-repository -y ppa:git-core/ppa
 
               apt -y install python3.8 python3.8-dev python3.8-venv python3-pip git openjdk-11-jre-headless build-essential nano
-          - container: ubuntu:latest
+          - container: ubuntu:rolling
             # Latest non-LTS Ubuntu
             #
             run: |-
