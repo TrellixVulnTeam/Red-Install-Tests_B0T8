@@ -134,7 +134,7 @@ jobs:
               iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
               choco upgrade git --params "/GitOnlyOnPath /WindowsTerminal" -y
               choco upgrade visualstudio2019-workload-vctools -y
-              choco upgrade python3 -y --version 3.8.8
+              choco upgrade python3 -y --version 3.8.10
 
               choco upgrade adoptopenjdk11jre -y
 
@@ -182,9 +182,9 @@ jobs:
           echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.profile
           source ~/.profile
 
-          CONFIGURE_OPTS=--enable-optimizations pyenv install 3.8.8 -v
+          CONFIGURE_OPTS=--enable-optimizations pyenv install 3.8.10 -v
 
-          pyenv global 3.8.8
+          pyenv global 3.8.10
 
       # Making a virtual environment and installing Red
       - name: Make a virtual environment (pyenv virtualenv)
