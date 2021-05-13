@@ -178,6 +178,7 @@ jobs:
 
           echo 'export PATH="'$HOME'/.pyenv/bin:$PATH"' >> ~/.profile
           echo 'eval "$(pyenv init -)"' >> ~/.profile
+          echo 'eval "$(pyenv init --path)"' >> ~/.profile
           echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.profile
           source ~/.profile
 
