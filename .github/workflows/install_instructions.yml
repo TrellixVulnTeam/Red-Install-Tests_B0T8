@@ -63,13 +63,13 @@ jobs:
             # https://fedorapeople.org/groups/schedule/f-34/f-34-all-tasks.html
             #
             run: |-
-              dnf -y install python38 git java-11-openjdk-headless @development-tools nano
+              dnf -y install python39 git java-11-openjdk-headless @development-tools nano
           - container: fedora:33
             # End of Life - 2021-11-16
             # https://fedorapeople.org/groups/schedule/f-35/f-35-all-tasks.html
             #
             run: |-
-              dnf -y install python38 git java-11-openjdk-headless @development-tools nano
+              dnf -y install python39 git java-11-openjdk-headless @development-tools nano
 
           # openSUSE
           - container: opensuse/leap:15.2
@@ -81,16 +81,16 @@ jobs:
               zypper -n ar -f https://download.opensuse.org/repositories/home:/Rotkraut:/Opt-Python/openSUSE_Leap_${VERSION_ID}/ Opt-Python
               zypper -n --gpg-auto-import-keys ref
 
-              zypper -n install opt-python38 opt-python38-setuptools git-core java-11-openjdk-headless nano
+              zypper -n install opt-python39 opt-python39-setuptools git-core java-11-openjdk-headless nano
               zypper -n install -t pattern devel_basis
 
               echo 'export PATH="/opt/python/bin:$PATH"' | tee /etc/profile.d/opt-python.sh
               source /etc/profile.d/opt-python.sh
 
-              /opt/python/bin/easy_install-3.8 pip
+              /opt/python/bin/easy_install-3.9 pip
           - container: opensuse/tumbleweed:latest
             run: |-
-              zypper -n install python38-base python38-pip git-core java-11-openjdk-headless nano
+              zypper -n install python39-base python39-pip git-core java-11-openjdk-headless nano
               zypper -n install -t pattern devel_basis
 
           - container: ubuntu:18.04
@@ -104,7 +104,7 @@ jobs:
 
               add-apt-repository -y ppa:deadsnakes/ppa
 
-              apt -y install python3.8 python3.8-dev python3.8-venv python3-pip git openjdk-11-jre-headless build-essential nano
+              apt -y install python3.9 python3.9-dev python3.9-venv python3-pip git openjdk-11-jre-headless build-essential nano
           - container: ubuntu:20.04
             # End of Standard Support - 2025-04-23
             # https://wiki.ubuntu.com/Releases#Current
@@ -114,7 +114,7 @@ jobs:
               apt -y install software-properties-common
               add-apt-repository -y ppa:git-core/ppa
 
-              apt -y install python3.8 python3.8-dev python3.8-venv python3-pip git openjdk-11-jre-headless build-essential nano
+              apt -y install python3.9 python3.9-dev python3.9-venv python3-pip git openjdk-11-jre-headless build-essential nano
           - container: ubuntu:rolling
             # Latest non-LTS Ubuntu
             #
@@ -134,7 +134,7 @@ jobs:
               iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
               choco upgrade git --params "/GitOnlyOnPath /WindowsTerminal" -y
               choco upgrade visualstudio2019-workload-vctools -y
-              choco upgrade python3 -y --version 3.8.10
+              choco upgrade python3 -y --version 3.9.5
 
               choco upgrade adoptopenjdk11jre -y
 
@@ -150,8 +150,8 @@ jobs:
               /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
               brew upgrade
-              brew install python@3.8
-              echo 'export PATH="/usr/local/opt/python@3.8/bin:$PATH"' >> ~/.bash_profile
+              brew install python@3.9
+              echo 'export PATH="/usr/local/opt/python@3.9/bin:$PATH"' >> ~/.bash_profile
               source ~/.bash_profile
               brew install git
               brew install --cask adoptopenjdk/openjdk/adoptopenjdk11
@@ -188,9 +188,9 @@ jobs:
           echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.profile
           source ~/.profile
 
-          CONFIGURE_OPTS=--enable-optimizations pyenv install 3.8.10 -v
+          CONFIGURE_OPTS=--enable-optimizations pyenv install 3.9.5 -v
 
-          pyenv global 3.8.10
+          pyenv global 3.9.5
 
       # Making a virtual environment and installing Red
       - name: Make a virtual environment (pyenv virtualenv)
@@ -210,7 +210,7 @@ jobs:
           !matrix.use_pyenv && runner.os != 'Windows'
         shell: bash -leo pipefail {0}
         run: |-
-          python3.8 -m venv ~/redenv
+          python3.9 -m venv ~/redenv
 
           source ~/redenv/bin/activate
 
@@ -222,7 +222,7 @@ jobs:
           runner.os == 'Windows'
         shell: cmd
         run: |-
-          py -3.8 -m venv "%userprofile%\redenv"
+          py -3.9 -m venv "%userprofile%\redenv"
 
           "%userprofile%\redenv\Scripts\activate.bat"
 
