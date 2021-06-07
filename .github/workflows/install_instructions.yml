@@ -203,7 +203,7 @@ jobs:
           pyenv shell redbot
 
           python -m pip install -U pip setuptools wheel
-          python -m pip install -U Red-DiscordBot[postgres]
+          python -m pip install -U git+https://github.com/Cog-Creators/Red-DiscordBot@refs/pull/5121/merge#egg=Red-DiscordBot[postgres]
 
       - name: Install Red inside venv (Linux/Mac)
         if: >-
@@ -215,7 +215,7 @@ jobs:
           source ~/redenv/bin/activate
 
           python -m pip install -U pip setuptools wheel
-          python -m pip install -U Red-DiscordBot[postgres]
+          python -m pip install -U git+https://github.com/Cog-Creators/Red-DiscordBot@refs/pull/5121/merge#egg=Red-DiscordBot[postgres]
 
       - name: Install Red inside venv (Windows)
         if: >-
@@ -227,4 +227,4 @@ jobs:
           "%userprofile%\redenv\Scripts\activate.bat"
 
           python -m pip install -U pip setuptools wheel
-          python -m pip install -U Red-DiscordBot[postgres]
+          python -m pip install -U git+https://github.com/Cog-Creators/Red-DiscordBot@refs/pull/5121/merge#egg=Red-DiscordBot[postgres]
