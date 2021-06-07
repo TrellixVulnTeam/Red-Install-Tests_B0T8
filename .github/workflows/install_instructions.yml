@@ -140,15 +140,18 @@ jobs:
 
           # macOS
           - os: macos-latest
-            # using `.bash_profile` over `.profile` in CI-only (see GH-3852)
+            # 1. using `.bash_profile` over `.profile` in CI-only (see GH-3852)
+            #
+            # 2. --force is required due to `brew install` failing
+            # when package is already installed but outdated
             run: |-
               /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
-              brew install python@3.8
+              brew install --force python@3.8
               echo 'export PATH="/usr/local/opt/python@3.8/bin:$PATH"' >> ~/.bash_profile
               source ~/.bash_profile
-              brew install git
-              brew install --cask adoptopenjdk/openjdk/adoptopenjdk11
+              brew install --force git
+              brew install --force --cask adoptopenjdk/openjdk/adoptopenjdk11
 
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
     container: ${{ matrix.container }}
