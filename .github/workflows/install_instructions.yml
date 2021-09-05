@@ -87,7 +87,7 @@ jobs:
               echo 'export PATH="/opt/python/bin:$PATH"' | tee /etc/profile.d/opt-python.sh
               source /etc/profile.d/opt-python.sh
 
-              /opt/python/bin/easy_install-3.9 pip
+              /opt/python/bin/python3.9 -m ensurepip --altinstall
           - container: opensuse/tumbleweed:latest
             run: |-
               zypper -n install python39-base python39-pip git-core java-11-openjdk-headless nano
