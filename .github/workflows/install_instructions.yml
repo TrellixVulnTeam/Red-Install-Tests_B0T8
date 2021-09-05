@@ -57,16 +57,15 @@ jobs:
               CXX=/usr/bin/g++
             use_pyenv: true
 
-          # https://fedoraproject.org/wiki/Fedora_Release_Life_Cycle#Maintenance_Schedule
-          - container: fedora:32
-            # End of Life - 2021-05-18
-            # https://fedorapeople.org/groups/schedule/f-34/f-34-all-tasks.html
-            #
-            run: |-
-              dnf -y install python39 git java-11-openjdk-headless @development-tools nano
           - container: fedora:33
             # End of Life - 2021-11-16
             # https://fedorapeople.org/groups/schedule/f-35/f-35-all-tasks.html
+            #
+            run: |-
+              dnf -y install python39 git java-11-openjdk-headless @development-tools nano
+          - container: fedora:34
+            # End of Life - 2022-05-17
+            # https://fedorapeople.org/groups/schedule/f-36/f-36-all-tasks.html
             #
             run: |-
               dnf -y install python39 git java-11-openjdk-headless @development-tools nano
