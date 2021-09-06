@@ -1,5 +1,11 @@
-macos_instance:
-  image: catalina-base
+install_red_venv: &INSTALL_RED_VENV
+  install_red_script: |-
+    python3.9 -m venv ~/redenv
+
+    source ~/redenv/bin/activate
+
+    python -m pip install -U pip setuptools wheel
+    python -m pip install -U git+https://github.com/Cog-Creators/Red-DiscordBot@V3/develop#egg=Red-DiscordBot[postgres]
 
 macos_catalina_task:
   macos_instance:
@@ -14,10 +20,18 @@ macos_catalina_task:
     brew install git
     brew install --cask adoptopenjdk/openjdk/adoptopenjdk11
 
-  install_red_script: |-
-    python3.9 -m venv ~/redenv
+  <<: *INSTALL_RED_VENV
 
-    source ~/redenv/bin/activate
+ubuntu_2004_focal_task:
+  compute_engine_instance:
+    image_project: ubuntu-os-cloud
+    image: family/ubuntu-2004-lts
+  # using `.bash_profile` over `.profile` in CI-only (see GH-3852)
+  install_instructions_script: |-
+    apt update
+    apt -y install software-properties-common
+    add-apt-repository -y ppa:git-core/ppa
 
-    python -m pip install -U pip setuptools wheel
-    python -m pip install -U git+https://github.com/Cog-Creators/Red-DiscordBot@V3/develop#egg=Red-DiscordBot[postgres]
+    apt -y install python3.9 python3.9-dev python3.9-venv python3-pip git openjdk-11-jre-headless build-essential nano
+
+  <<: *INSTALL_RED_VENV
