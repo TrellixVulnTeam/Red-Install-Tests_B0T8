@@ -1,0 +1,23 @@
+macos_instance:
+  image: catalina-base
+
+macos_catalina_task:
+  macos_instance:
+    image: catalina-base
+  # using `.bash_profile` over `.profile` in CI-only (see GH-3852)
+  install_instructions_script: |-
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+    brew install python@3.9
+    echo 'export PATH="/usr/local/opt/python@3.9/bin:$PATH"' >> ~/.bash_profile
+    source ~/.bash_profile
+    brew install git
+    brew install --cask adoptopenjdk/openjdk/adoptopenjdk11
+
+  install_red_script: |-
+    python3.9 -m venv ~/redenv
+
+    source ~/redenv/bin/activate
+
+    python -m pip install -U pip setuptools wheel
+    python -m pip install -U git+https://github.com/Cog-Creators/Red-DiscordBot@V3/develop#egg=Red-DiscordBot[postgres]
