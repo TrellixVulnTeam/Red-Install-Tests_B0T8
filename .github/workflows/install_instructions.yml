@@ -95,7 +95,7 @@ jobs:
 
               /opt/python/bin/python3.9 -m ensurepip --altinstall
           - container: opensuse/leap:15.3
-            # End of Life (planned) - 2021-11-30
+            # End of Life (planned) - 2022-11-30
             # https://en.opensuse.org/Lifetime#openSUSE_Leap
             #
             run: |-
