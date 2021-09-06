@@ -197,7 +197,7 @@ windows_task:
   windows_container:
     image: cirrusci/windowsservercore:2019
   install_instructions_script:
-    ps: |-
+    - ps: |-
       Set-ExecutionPolicy Bypass -Scope Process -Force
       iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
       choco upgrade git --params "/GitOnlyOnPath /WindowsTerminal" -y
