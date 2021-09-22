@@ -27,7 +27,7 @@ jobs:
             # skipping `source .profile` as it's ran by bash automatically in next step
             run: |-
               yum -y groupinstall development
-              yum -y install zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel xz xz-devel tk-devel libffi-devel findutils java-11-openjdk-headless nano
+              yum -y install gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel tk-devel libffi-devel xz-devel java-11-openjdk-headless nano git
               yum -y install centos-release-scl
               yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++
               echo "source scl_source enable devtoolset-8" >> ~/.profile
@@ -40,11 +40,44 @@ jobs:
             # https://wiki.centos.org/About/Product
             #
             run: |-
-              yum -y install epel-release
-              yum -y update
-              yum -y groupinstall development
-              yum -y install git zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel xz xz-devel tk-devel libffi-devel findutils java-11-openjdk-headless nano
-            use_pyenv: true
+              dnf -y update
+              dnf -y group install development
+              dnf -y install python39 python39-pip python39-devel java-11-openjdk-headless nano git
+          - container: tgagor/centos-stream:stream8
+            # End of Maintenance Updates - 2021-12-31
+            # https://wiki.centos.org/About/Product
+            #
+            run: |-
+              dnf -y update
+              dnf -y group install development
+              dnf -y install python39 python39-pip python39-devel java-11-openjdk-headless nano git
+          # Oracle Linux
+          - container: oraclelinux:8
+            # End of Premier Support - 2029-07-31
+            # https://www.oracle.com/us/support/library/elsp-lifetime-069338.pdf
+            #
+            run: |-
+              dnf -y update
+              dnf -y group install development
+              dnf -y install python39 python39-pip python39-devel java-11-openjdk-headless nano git
+          # RHEL
+          - container: registry.access.redhat.com/ubi8/ubi:8.4
+            # End of Extended Update Support - 2023-05-30
+            # https://access.redhat.com/support/policy/updates/errata#Extended_Update_Support
+            #
+            run: |-
+              dnf -y update
+              dnf -y group install development
+              dnf -y install python39 python39-pip python39-devel java-11-openjdk-headless nano git
+          # Rocky Linux
+          - container: rockylinux/rockylinux
+            # End of Extended Update Support - 2029-05-31
+            # https://rockylinux.org/download
+            #
+            run: |-
+              dnf -y update
+              dnf -y group install development
+              dnf -y install python39 python39-pip python39-devel java-11-openjdk-headless nano git
 
           # Debian
           - container: debian:buster
