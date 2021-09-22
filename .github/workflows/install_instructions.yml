@@ -60,15 +60,6 @@ jobs:
               dnf -y update
               dnf -y group install development
               dnf -y install python39 python39-pip python39-devel java-11-openjdk-headless nano git
-          # RHEL
-          - container: registry.access.redhat.com/ubi8/ubi:8.4
-            # End of Extended Update Support - 2023-05-30
-            # https://access.redhat.com/support/policy/updates/errata#Extended_Update_Support
-            #
-            run: |-
-              dnf -y update
-              dnf -y group install development
-              dnf -y install python39 python39-pip python39-devel java-11-openjdk-headless nano git
           # Rocky Linux
           - container: rockylinux/rockylinux
             # End of Extended Update Support - 2029-05-31
