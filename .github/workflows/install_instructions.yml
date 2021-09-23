@@ -209,6 +209,8 @@ jobs:
     steps:
       # Installing requirements
       - name: Run install instructions (Linux/Mac)
+        id: install_linux
+        continue-on-error: ${{ matrix.container == 'opensuse/tumbleweed:latest' }}
         run: ${{ matrix.run }}
         if: >-
           runner.os != 'Windows'
@@ -222,7 +224,7 @@ jobs:
 
       - name: Install Python with pyenv
         if: >-
-          matrix.use_pyenv
+          steps.install_linux.outcome == 'success' && matrix.use_pyenv
         shell: bash -leo pipefail {0}
         # `echo` commands are CI-only - users have to add those lines on their own
         run: |-
@@ -241,7 +243,7 @@ jobs:
       # Making a virtual environment and installing Red
       - name: Make a virtual environment (pyenv virtualenv)
         if: >-
-          matrix.use_pyenv
+          steps.install_linux.outcome == 'success' && matrix.use_pyenv
         shell: bash -leo pipefail {0}
         run: |-
           pyenv virtualenv redbot
@@ -253,7 +255,7 @@ jobs:
 
       - name: Install Red inside venv (Linux/Mac)
         if: >-
-          !matrix.use_pyenv && runner.os != 'Windows'
+          steps.install_linux.outcome == 'success' && !matrix.use_pyenv && runner.os != 'Windows'
         shell: bash -leo pipefail {0}
         run: |-
           python3.9 -m venv ~/redenv
@@ -274,3 +276,7 @@ jobs:
 
           python -m pip install -U pip setuptools wheel
           python -m pip install -U Red-DiscordBot[postgres]
+
+      - name: Ensure failure
+        if: ${{ steps.install_linux.outcome == 'success' && matrix.container == 'opensuse/tumbleweed:latest' }}
+        run: exit 1
