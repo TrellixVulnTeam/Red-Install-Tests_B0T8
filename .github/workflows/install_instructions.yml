@@ -100,6 +100,12 @@ jobs:
             #
             run: |-
               dnf -y install python39 git java-11-openjdk-headless @development-tools nano
+          - container: fedora:35
+            # End of Life - 2022-05-17
+            # https://fedorapeople.org/groups/schedule/f-36/f-36-all-tasks.html
+            #
+            run: |-
+              dnf -y install python39 git java-11-openjdk-headless @development-tools nano
 
           # openSUSE
           - container: opensuse/leap:15.2
