@@ -294,6 +294,6 @@ jobs:
           python -m pip install -U pip setuptools wheel
           python -m pip install -U Red-DiscordBot[postgres]
 
-      - name: Ensure failure
-        if: ${{ steps.install_linux.outcome == 'success' && matrix.container == 'opensuse/tumbleweed:latest' }}
-        run: exit 1
+      # - name: Ensure failure
+      #   if: ${{ steps.install_linux.outcome == 'success' && matrix.container == 'opensuse/tumbleweed:latest' }}
+      #   run: exit 1
