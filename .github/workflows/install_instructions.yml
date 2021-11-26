@@ -18,6 +18,15 @@ jobs:
             run: |-
               pacman --noconfirm -Syu python python-pip git jre11-openjdk-headless base-devel nano
 
+          # Alma Linux
+          - container: almalinux:8
+            # How long will CloudLinux support AlmaLinux? - 2029-05-31
+            # https://wiki.almalinux.org/FAQ.html#how-long-will-cloudlinux-support-almalinux
+            #
+            run: |-
+              dnf -y update
+              dnf -y group install development
+              dnf -y install python39 python39-pip python39-devel java-11-openjdk-headless nano git
           # CentOS
           - container: centos:7
             # End of Maintenance Updates - 2024-06-30
