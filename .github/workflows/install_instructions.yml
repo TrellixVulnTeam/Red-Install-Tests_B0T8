@@ -16,7 +16,12 @@ jobs:
           - container: archlinux:latest
             # using `--noconfirm` in CI-only
             run: |-
-              pacman --noconfirm -Syu python python-pip git jre11-openjdk-headless base-devel nano
+              pacman --noconfirm -Syu git jre11-openjdk-headless base-devel nano
+              git clone https://aur.archlinux.org/python39.git /tmp/python39
+              cd /tmp/python39
+              makepkg --noconfirm -sicL
+              cd -
+              rm -rf /tmp/python39
 
           # Alma Linux
           - container: almalinux:8
