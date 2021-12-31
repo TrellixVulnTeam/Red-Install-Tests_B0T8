@@ -16,10 +16,16 @@ jobs:
           - container: archlinux:latest
             # using `--noconfirm` in CI-only
             run: |-
+              # makepkg can't be ran as root so we need to create builduser first
+              useradd builduser -m
+              passwd -d builduser
+              printf 'builduser ALL=(ALL) ALL\n' | tee -a /etc/sudoers
+              printf 'root ALL=(ALL:ALL) ALL\n' | tee -a /etc/sudoers
+
               pacman --noconfirm -Syu git jre11-openjdk-headless base-devel nano
-              git clone https://aur.archlinux.org/python39.git /tmp/python39
+              sudo -u builduser git clone https://aur.archlinux.org/python39.git /tmp/python39
               cd /tmp/python39
-              makepkg --noconfirm -sicL
+              sudo -u builduser makepkg --noconfirm -sicL
               cd -
               rm -rf /tmp/python39
 
