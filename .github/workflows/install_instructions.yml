@@ -71,6 +71,12 @@ jobs:
               dnf -y update
               dnf -y group install development
               dnf -y install python39 python39-pip python39-devel java-11-openjdk-headless nano git
+          - container: quay.io/centos/centos:stream9
+            # Expected EOL - 2027-05-31
+            # https://centos.org/stream9/#timeline
+            #
+            run: |-
+              dnf -y install python39 git java-11-openjdk-headless @development nano
           # Oracle Linux
           - container: oraclelinux:8
             # End of Premier Support - 2029-07-31
