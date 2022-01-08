@@ -63,7 +63,7 @@ jobs:
               dnf -y update
               dnf -y group install development
               dnf -y install python39 python39-pip python39-devel java-11-openjdk-headless nano git
-          - container: tgagor/centos-stream:stream8
+          - container: quay.io/centos/centos:stream8
             # End of Maintenance Updates - 2024-05-31
             # https://wiki.centos.org/About/Product
             #
