@@ -249,6 +249,35 @@ jobs:
     container: ${{ matrix.container }}
     env:
       DEBIAN_FRONTEND: noninteractive
+      CHECK_JAVA_VERSION: |
+        import re
+        import subprocess
+        import sys
+
+        _RE_JAVA_VERSION_LINE_PRE223 = re.compile(
+            r'version "1\.(?P<major>[0-8])\.(?P<minor>0)(?:_(?:\d+))?(?:-.*)?"'
+        )
+        _RE_JAVA_VERSION_LINE_223 = re.compile(
+            r'version "(?P<major>\d+)(?:\.(?P<minor>\d+))?(?:\.\d+)*(\-[a-zA-Z0-9]+)?"'
+        )
+
+        process = subprocess.run(("java", "-version"), stderr=subprocess.PIPE, check=True)
+        version_info = process.stderr.decode("utf-8")
+        lines = version_info.splitlines()
+        for line in lines:
+            match = _RE_JAVA_VERSION_LINE_PRE223.search(line)
+            if match is None:
+                match = _RE_JAVA_VERSION_LINE_223.search(line)
+            if match is None:
+                continue
+            major = int(match["major"])
+            if major == 11:
+                sys.exit(0)
+            print(f"The detected Java version ({major}) is different from expected (11).")
+            sys.exit(1)
+        print("Couldn't determine Java version!")
+        sys.exit(1)
+
     steps:
       # Installing requirements
       - name: Run install instructions (Linux/Mac)
@@ -319,6 +348,13 @@ jobs:
 
           python -m pip install -U pip setuptools wheel
           python -m pip install -U Red-DiscordBot[postgres]
+
+      - name: Verify default Java version (Linux-only).
+        if: >-
+          runner.os == 'Linux'
+        shell: bash -leo pipefail {0}
+        run: |-
+          python3.9 -c "import os; exec(os.environ['CHECK_JAVA_VERSION'])"
 
       # - name: Ensure failure
       #   if: ${{ steps.install_linux.outcome == 'success' && matrix.container == 'opensuse/tumbleweed:latest' }}
