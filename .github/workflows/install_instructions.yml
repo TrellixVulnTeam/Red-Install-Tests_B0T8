@@ -214,7 +214,7 @@ jobs:
               choco upgrade visualstudio2019-workload-vctools -y
               choco upgrade python3 -y --version 3.9.7
 
-              choco upgrade adoptopenjdk11jre -y
+              choco upgrade temurin11 -y
 
           # macOS
           #
