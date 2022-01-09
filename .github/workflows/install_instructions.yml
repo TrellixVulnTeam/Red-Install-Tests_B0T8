@@ -38,6 +38,7 @@ jobs:
               dnf -y update
               dnf -y group install development
               dnf -y install python39 python39-pip python39-devel java-11-openjdk-headless nano git
+              alternatives --set java "java-11-openjdk.$(uname -i)"
           # CentOS
           - container: centos:7
             # End of Maintenance Updates - 2024-06-30
@@ -63,6 +64,7 @@ jobs:
               dnf -y update
               dnf -y group install development
               dnf -y install python39 python39-pip python39-devel java-11-openjdk-headless nano git
+              alternatives --set java "java-11-openjdk.$(uname -i)"
           - container: quay.io/centos/centos:stream8
             # End of Maintenance Updates - 2024-05-31
             # https://wiki.centos.org/About/Product
@@ -71,6 +73,7 @@ jobs:
               dnf -y update
               dnf -y group install development
               dnf -y install python39 python39-pip python39-devel java-11-openjdk-headless nano git
+              alternatives --set java "java-11-openjdk.$(uname -i)"
           - container: quay.io/centos/centos:stream9
             # Expected EOL - 2027-05-31
             # https://centos.org/stream9/#timeline
@@ -86,6 +89,7 @@ jobs:
               dnf -y update
               dnf -y group install development
               dnf -y install python39 python39-pip python39-devel java-11-openjdk-headless nano git
+              alternatives --set java "java-11-openjdk.$(uname -i)"
           # Rocky Linux
           - container: rockylinux/rockylinux
             # End of Extended Update Support - 2029-05-31
@@ -95,6 +99,7 @@ jobs:
               dnf -y update
               dnf -y group install development
               dnf -y install python39 python39-pip python39-devel java-11-openjdk-headless nano git
+              alternatives --set java "java-11-openjdk.$(uname -i)"
 
           # Debian
           - container: debian:buster
