@@ -56,15 +56,6 @@ jobs:
               yum -y install https://repo.ius.io/ius-release-el7.rpm
               yum -y swap git git224
             use_pyenv: true
-          - container: centos:8
-            # End of Maintenance Updates - 2021-12-31
-            # https://wiki.centos.org/About/Product
-            #
-            run: |-
-              dnf -y update
-              dnf -y group install development
-              dnf -y install python39 python39-pip python39-devel java-11-openjdk-headless nano git
-              alternatives --set java "java-11-openjdk.$(uname -i)"
           - container: quay.io/centos/centos:stream8
             # End of Maintenance Updates - 2024-05-31
             # https://wiki.centos.org/About/Product
