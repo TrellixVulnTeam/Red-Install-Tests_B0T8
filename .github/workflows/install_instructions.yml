@@ -347,7 +347,7 @@ jobs:
 
       - name: Verify default Java version (Linux-only).
         if: >-
-          runner.os == 'Linux'
+          steps.install_linux.outcome == 'success' && runner.os == 'Linux'
         shell: bash -leo pipefail {0}
         run: |-
           python3.9 -c "import os; exec(os.environ['CHECK_JAVA_VERSION'])"
