@@ -46,7 +46,7 @@ jobs:
 
               yum -y install https://repo.ius.io/ius-release-el7.rpm
               yum -y swap git git224
-            venv_method: "pyenv"
+            venv_method: "pyenv39"
           - container: quay.io/centos/centos:stream8
             # End of Maintenance Updates - 2024-05-31
             # https://wiki.centos.org/About/Product
@@ -94,7 +94,7 @@ jobs:
             #
             run: |-
               apt update
-              apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev libgdbm-dev uuid-dev python3-openssl git openjdk-11-jre-headless nano
+              apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev libgdbm-dev uuid-dev python3-openssl git openjdk-11-jre-headless nano
               CXX=/usr/bin/g++
             venv_method: "pyenv"
           - container: debian:bullseye
@@ -143,6 +143,8 @@ jobs:
             run: |-
               apt update
               apt -y install software-properties-common
+              add-apt-repository -y ppa:git-core/ppa
+
               add-apt-repository -y ppa:deadsnakes/ppa
 
               apt -y install python3.10 python3.10-dev python3.10-venv python3-pip git openjdk-11-jre-headless build-essential nano
@@ -255,7 +257,26 @@ jobs:
           runner.os == 'Windows'
         shell: powershell
 
-      - name: Install Python with pyenv
+      - name: Install Python 3.9 with pyenv
+        if: >-
+          steps.install_linux.outcome == 'success' && matrix.venv_method == 'pyenv39'
+        shell: bash -leo pipefail {0}
+        # `echo` commands are CI-only - users have to add those lines on their own
+        run: |-
+          command -v pyenv && pyenv update || curl https://pyenv.run | bash
+
+          echo 'export PATH="'$HOME'/.pyenv/bin:$PATH"' >> ~/.profile
+          echo 'eval "$(pyenv init -)"' >> ~/.profile
+          echo 'eval "$(pyenv init --path)"' >> ~/.profile
+          echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.profile
+          source ~/.profile
+
+          CONFIGURE_OPTS=--enable-optimizations pyenv install 3.9.12 -v
+
+          pyenv global 3.9.12
+          echo 'MY_PYTHON=python3.9' >> $GITHUB_ENV
+
+      - name: Install Python 3.10 with pyenv
         if: >-
           steps.install_linux.outcome == 'success' && matrix.venv_method == 'pyenv'
         shell: bash -leo pipefail {0}
@@ -272,11 +293,12 @@ jobs:
           CONFIGURE_OPTS=--enable-optimizations pyenv install 3.10.4 -v
 
           pyenv global 3.10.4
+          echo 'MY_PYTHON=python3.10' >> $GITHUB_ENV
 
       # Making a virtual environment and installing Red
       - name: Make a virtual environment (pyenv virtualenv)
         if: >-
-          steps.install_linux.outcome == 'success' && matrix.venv_method == 'pyenv'
+          steps.install_linux.outcome == 'success' && (matrix.venv_method == 'pyenv' || matrix.venv_method == 'pyenv39')
         shell: bash -leo pipefail {0}
         run: |-
           pyenv virtualenv redbot
@@ -284,7 +306,7 @@ jobs:
           pyenv shell redbot
 
           python -m pip install -U pip setuptools wheel
-          python -m pip install -U Red-DiscordBot[postgres]
+          python -m pip install -U git+https://github.com/jack1142/Red-DiscordBot@dep_changes#egg=Red-DiscordBot[postgres]
 
       - name: Install Red inside venv on Python 3.9 (Linux/Mac)
         if: >-
@@ -296,7 +318,8 @@ jobs:
           source ~/redenv/bin/activate
 
           python -m pip install -U pip setuptools wheel
-          python -m pip install -U Red-DiscordBot[postgres]
+          python -m pip install -U git+https://github.com/jack1142/Red-DiscordBot@dep_changes#egg=Red-DiscordBot[postgres]
+          echo 'MY_PYTHON=python3.9' >> $GITHUB_ENV
 
       - name: Install Red inside venv on Python 3.10 (Linux/Mac)
         if: >-
@@ -308,7 +331,8 @@ jobs:
           source ~/redenv/bin/activate
 
           python -m pip install -U pip setuptools wheel
-          python -m pip install -U Red-DiscordBot[postgres]
+          python -m pip install -U git+https://github.com/jack1142/Red-DiscordBot@dep_changes#egg=Red-DiscordBot[postgres]
+          echo 'MY_PYTHON=python3.10' >> $GITHUB_ENV
 
       - name: Install Red inside venv (Windows)
         if: >-
@@ -320,14 +344,14 @@ jobs:
           "%userprofile%\redenv\Scripts\activate.bat"
 
           python -m pip install -U pip setuptools wheel
-          python -m pip install -U Red-DiscordBot[postgres]
+          python -m pip install -U git+https://github.com/jack1142/Red-DiscordBot@dep_changes#egg=Red-DiscordBot[postgres]
 
       - name: Verify default Java version (Linux-only).
         if: >-
           steps.install_linux.outcome == 'success' && runner.os == 'Linux'
         shell: bash -leo pipefail {0}
         run: |-
-          python3.9 -c "import os; exec(os.environ['CHECK_JAVA_VERSION'])"
+          $MY_PYTHON -c "import os; exec(os.environ['CHECK_JAVA_VERSION'])"
 
       # - name: Ensure failure
       #   if: ${{ steps.install_linux.outcome == 'success' && matrix.container == 'opensuse/tumbleweed:latest' }}
