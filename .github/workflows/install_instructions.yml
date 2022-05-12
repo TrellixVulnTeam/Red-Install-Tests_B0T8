@@ -120,6 +120,13 @@ jobs:
             run: |-
               dnf -y install python3.10 git java-11-openjdk-headless @development-tools nano
             venv_method: "venv310"
+          - container: fedora:36
+            # End of Life - 2022-05-17
+            # https://fedorapeople.org/groups/schedule/f-38/f-38-all-tasks.html
+            #
+            run: |-
+              dnf -y install python3.10 git java-11-openjdk-headless @development-tools nano
+            venv_method: "venv310"
 
           # openSUSE
           - container: opensuse/leap:15.3
