@@ -286,9 +286,9 @@ jobs:
           echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.profile
           source ~/.profile
 
-          CONFIGURE_OPTS=--enable-optimizations pyenv install 3.9.12 -v
+          CONFIGURE_OPTS=--enable-optimizations pyenv install 3.9.13 -v
 
-          pyenv global 3.9.12
+          pyenv global 3.9.13
           echo 'MY_PYTHON=python3.9' >> $GITHUB_ENV
 
       - name: Install Python 3.10 with pyenv
