@@ -164,6 +164,14 @@ jobs:
               apt update
               apt -y install python3.9 python3.9-dev python3.9-venv python3-pip git openjdk-11-jre-headless build-essential nano
             venv_method: "venv39"
+          - container: ubuntu:22.04
+            # End of Standard Support - 2027-04-21
+            # https://wiki.ubuntu.com/Releases#Current
+            #
+            run: |-
+              apt update
+              apt -y install python3.10 python3.10-dev python3.10-venv python3-pip git openjdk-11-jre-headless build-essential nano
+            venv_method: "venv310"
           - container: ubuntu:rolling
             # Latest non-LTS Ubuntu
             #
