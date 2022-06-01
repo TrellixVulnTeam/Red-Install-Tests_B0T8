@@ -209,7 +209,8 @@ jobs:
               echo 'export PATH="/usr/local/opt/python@3.10/bin:$PATH"' >> ~/.bash_profile
               source ~/.bash_profile
               brew install git
-              brew install --cask adoptopenjdk/openjdk/adoptopenjdk11
+              brew tap homebrew/cask-versions
+              brew install --cask temurin11
             venv_method: "venv310"
           - os: macos-11
             run: |-
@@ -220,7 +221,8 @@ jobs:
               echo 'export PATH="/usr/local/opt/python@3.10/bin:$PATH"' >> ~/.bash_profile
               source ~/.bash_profile
               brew install git
-              brew install --cask adoptopenjdk/openjdk/adoptopenjdk11
+              brew tap homebrew/cask-versions
+              brew install --cask temurin11
             venv_method: "venv310"
 
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
