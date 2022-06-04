@@ -30,6 +30,14 @@ jobs:
               dnf -y install python39 python39-pip python39-devel java-11-openjdk-headless nano git
               alternatives --set java "java-11-openjdk.$(uname -i)"
             venv_method: "venv39"
+          # Alma Linux
+          - container: almalinux:9
+            # EOL: 2032-05-31
+            # https://user-images.githubusercontent.com/30789544/170988196-43f49795-832f-434a-9e4c-ce8f64153860.png
+            #
+            run: |-
+              dnf -y install python39 git java-11-openjdk-headless @development nano
+            venv_method: "venv39"
           # CentOS
           - container: centos:7
             # End of Maintenance Updates - 2024-06-30
