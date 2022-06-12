@@ -1,0 +1,73 @@
+name: Test install instructions
+
+on:
+  workflow_dispatch:
+  push:
+  schedule:
+    - cron: '5 16 * * *'
+
+jobs:
+  install:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # macOS
+          #
+          # 1. using `.bash_profile` over `.profile` in CI-only (see GH-3852)
+          #
+          # 2. `brew upgrade` is required due to `brew install` failing
+          # when package is already installed but outdated
+          # This should probably be changed to something faster
+          # but it is too much effort right now
+          - os: macos-10.15
+            run: |-
+              /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+              brew upgrade
+              brew install python@3.9
+              echo 'export PATH="/usr/local/opt/python@3.9/bin:$PATH"' >> ~/.bash_profile
+              source ~/.bash_profile
+              brew install git
+              brew tap homebrew/cask-versions
+              brew install --cask temurin11
+            venv_method: "venv39"
+          - os: macos-11
+            run: |-
+              /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+              brew upgrade
+              brew install python@3.9
+              echo 'export PATH="/usr/local/opt/python@3.9/bin:$PATH"' >> ~/.bash_profile
+              source ~/.bash_profile
+              brew install git
+              brew tap homebrew/cask-versions
+              brew install --cask temurin11
+            venv_method: "venv39"
+
+    runs-on: ${{ matrix.os || 'ubuntu-latest' }}
+    container: ${{ matrix.container }}
+    env:
+      DEBIAN_FRONTEND: noninteractive
+
+    steps:
+      # Installing requirements
+      - name: Run install instructions (Linux/Mac)
+        id: install_linux
+        run: ${{ matrix.run }}
+        if: >-
+          runner.os != 'Windows'
+        shell: bash -leo pipefail {0}
+
+      # Making a virtual environment and installing Red
+      - name: Install Red inside venv on Python 3.9 (Linux/Mac)
+        if: >-
+          matrix.venv_method == 'venv39'
+        shell: bash -leo pipefail {0}
+        run: |-
+          python3.9 -m venv ~/redenv
+
+          source ~/redenv/bin/activate
+
+          python -m pip install -U pip setuptools wheel
+          python -m pip install -U Red-DiscordBot
