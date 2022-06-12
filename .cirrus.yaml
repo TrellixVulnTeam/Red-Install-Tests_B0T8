@@ -120,8 +120,10 @@ macos_catalina_task:
   <<: *INSTALL_RED_VENV39
 
 windows_task:
-  windows_container:
-    image: cirrusci/windowsservercore:2019
+  compute_engine_instance:
+    image_project: windows-cloud
+    image: family/windows-2022-core
+    platform: windows
   install_instructions_script:
     - ps: |-
         Set-ExecutionPolicy Bypass -Scope Process -Force
