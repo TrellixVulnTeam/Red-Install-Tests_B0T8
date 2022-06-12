@@ -134,6 +134,9 @@ windows_task:
         choco upgrade python3 -y --version 3.9.13
 
         choco upgrade temurin11 -y --version 11.0.14.10100
+  refresh_path_script: |-
+    C:\ProgramData\chocolatey\bin\RefreshEnv.cmd
+    echo PATH=%PATH% >> "%CIRRUS_ENV%"
   install_red_script: |-
     py -3.9 -m venv "%userprofile%\redenv"
 
