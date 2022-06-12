@@ -33,7 +33,7 @@ jobs:
           # but it is too much effort right now
           - os: macos-10.15
             run: |-
-              /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+              /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
               brew upgrade
               brew install python@3.9
@@ -45,7 +45,7 @@ jobs:
             venv_method: "venv39"
           - os: macos-11
             run: |-
-              /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+              /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
               brew upgrade
               brew install python@3.9
