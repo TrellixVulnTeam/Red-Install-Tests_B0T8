@@ -166,7 +166,8 @@ archlinux_task:
   compute_engine_instance:
     image_project: arch-linux-gce
     image: family/arch
-    cpu: 1
+    # For some reason, this image doesn't work with only one core assigned to it.
+    cpu: 2
     memory: 2G
   # makepkg can't be ran as root so we need to create builduser first
   create_builduser_script: |-
