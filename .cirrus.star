@@ -1,6 +1,24 @@
-load("cirrus", "env")
+load("cirrus", "env", "fs", "yaml")
 
 load("github.com/cirrus-modules/graphql", "failed_instruction", "rerun_task")
+load("github.com/cirrus-modules/helpers", "container", "script", "task")
+
+
+def _on_build_finish_task():
+    """Prevent triggering emails before re-run of some task finishes."""
+    return (
+        "on_build_finish_task",
+        task(
+            "on_build_finish",
+            container("alpine", cpu=0.1, memory=256),
+            depends_on=[
+                key[:-5]
+                for key in yaml.loads(fs.read(".cirrus.yaml"))
+                if key.endswith("_task")
+            ],
+            instructions=[script("echo 'Build finished'")],
+        ),
+    )
 
 
 def main(ctx):
@@ -10,7 +28,10 @@ def main(ctx):
     elif env["CIRRUS_BRANCH"] != "dev":
         package_name += "@refs/{0}/merge".format(env["CIRRUS_BRANCH"])
 
-    return [("env", {"RED_PACKAGE_NAME": package_name})]
+    return [
+        ("env", {"RED_PACKAGE_NAME": package_name}),
+        _on_build_finish_task(),
+    ]
 
 
 def on_task_failed(ctx):
