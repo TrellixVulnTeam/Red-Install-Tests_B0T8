@@ -57,6 +57,8 @@ def on_task_failed(ctx):
                 or line.startswith("Cannot retrieve metalink for repository: ")
                 # observed with zypper on openSUSE Tumbleweed
                 or line.endswith("does not contain the desired medium")
+                # observed with apt on Raspbian
+                or line.startswith("E: Failed to fetch")
             ):
                 should_rerun = True
                 break
