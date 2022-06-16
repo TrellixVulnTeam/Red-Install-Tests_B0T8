@@ -11,6 +11,7 @@ def _on_build_finish_task():
         task(
             "on_build_finish",
             container("alpine", cpu=0.1, memory=256),
+            env={"CIRRUS_SHELL": "sh"},
             depends_on=[
                 key[:-5]
                 for key in yaml.loads(fs.read(".cirrus.yaml"))
