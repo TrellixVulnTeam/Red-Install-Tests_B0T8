@@ -82,8 +82,8 @@ def _check_for_intermittent_errors(ctx):
     if task_name == "install_instructions":
         for line in logs:
             if (
-                # observed with dnf on Alma Linux and Fedora (GCE images)
-                line == "Errors during downloading metadata for repository 'google-cloud-sdk':"
+                # observed with dnf on RHEL derivatives
+                line.startswith("Errors during downloading metadata for repository")
                 # observed with dnf on RHEL derivatives
                 or line.startswith("Cannot retrieve metalink for repository: ")
                 # observed with zypper on openSUSE Tumbleweed
