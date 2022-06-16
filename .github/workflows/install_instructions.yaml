@@ -9,9 +9,12 @@ on:
 env:
   RED_PACKAGE_NAME: |-
     ${{
-      github.ref_name == 'main' && 'Red-DiscordBot'
-      || github.ref_name == 'dev' && 'git+https://github.com/Cog-Creators/Red-DiscordBot'
-      || format('git+https://github.com/Cog-Creators/Red-DiscordBot@refs/{0}/merge', github.ref_name)
+      github.ref_name == 'dev' && 'https://github.com/Cog-Creators/Red-DiscordBot/tarball/V3/develop'
+      || startsWith(github.ref_name, 'pull/') && format(
+        'https://github.com/Cog-Creators/Red-DiscordBot/tarball/refs/{0}/merge',
+        github.ref_name
+      )
+      || 'Red-DiscordBot'
     }}
 
 jobs:
