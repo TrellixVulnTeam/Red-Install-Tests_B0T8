@@ -90,6 +90,11 @@ def _check_for_intermittent_errors(ctx):
                 or line.startswith("Cannot retrieve metalink for repository: ")
                 # observed with zypper on openSUSE Tumbleweed
                 or line.endswith("does not contain the desired medium")
+                # observed with zypper on openSUSE Leap, it means:
+                #  Some repository had to be disabled temporarily because it failed to refresh
+                or line == "Exit status: 106"
+                # observed with zypper on openSUSE Leap
+                or "is temporarily unaccessible" in line
                 # observed with apt on Raspbian
                 or line.startswith("E: Failed to fetch")
             ):
