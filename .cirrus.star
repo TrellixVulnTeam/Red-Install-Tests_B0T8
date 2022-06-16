@@ -97,6 +97,8 @@ def _check_for_intermittent_errors(ctx):
                 or "is temporarily unaccessible" in line
                 # observed with apt on Raspbian
                 or line.startswith("E: Failed to fetch")
+                # observed with chocolatey on Windows
+                or line.startswith(" The remote server returned an error:")
             ):
                 should_rerun = True
                 break
