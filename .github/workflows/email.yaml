@@ -13,12 +13,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: octokit/request-action@v2.x
+        id: get_on_build_finish_check_run
+        with:
+          route: GET /repos/${{ github.repository }}/check-suites/${{ github.event.check_suite.id }}/check-runs?check_name=on_build_finish
+          mediaType: '{"previews": ["antiope"]}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: octokit/request-action@v2.x
         id: get_failed_check_run
         with:
           route: GET /repos/${{ github.repository }}/check-suites/${{ github.event.check_suite.id }}/check-runs?status=completed
           mediaType: '{"previews": ["antiope"]}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ fromJson(steps.get_on_build_finish_check_run.outputs.data).check_runs[0].conclusion != 'neutral' }}
       - run: |
           echo "Cirrus CI ${{ github.event.check_suite.conclusion }} on ${{ github.event.check_suite.head_branch }} branch!"
           echo "SHA ${{ github.event.check_suite.head_sha }}"
@@ -26,3 +34,4 @@ jobs:
           echo "##[error]See $CHECK_RUN_URL for details" && false
         env:
           CHECK_RUN_URL: ${{ fromJson(steps.get_failed_check_run.outputs.data).check_runs[0].html_url }}
+        if: ${{ fromJson(steps.get_on_build_finish_check_run.outputs.data).check_runs[0].conclusion != 'neutral' }}

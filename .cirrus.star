@@ -1,24 +1,40 @@
 load("cirrus", "env", "fs", "yaml")
 
-load("github.com/cirrus-modules/graphql", "failed_instruction", "rerun_task")
+load("github.com/cirrus-modules/graphql", "execute", "failed_instruction", "rerun_task")
 load("github.com/cirrus-modules/helpers", "container", "script", "task")
 
 
+_MANUAL_TASK_NAME = "on_build_finish"
+_GET_TASK_STATUSES_QUERY = """\
+query GetTaskStatusesQuery($build_id: ID!) {
+    build(id: $build_id) {
+        tasks {
+            id
+            name
+            status
+        }
+    }
+}"""
+_TASK_TRIGGER_MUTATION = """\
+mutation TaskTriggerMutation($input: TaskTriggerInput!) {
+    trigger(input: $input) {
+        clientMutationId
+    }
+}"""
+
+
 def _on_build_finish_task():
-    """Prevent triggering emails before re-run of some task finishes."""
     return (
-        "on_build_finish_task",
+        _MANUAL_TASK_NAME + "_task",
         task(
-            "on_build_finish",
+            _MANUAL_TASK_NAME,
             container("alpine", cpu=0.1, memory=256),
             env={"CIRRUS_SHELL": "sh"},
-            depends_on=[
-                key[:-5]
-                for key in yaml.loads(fs.read(".cirrus.yaml"))
-                if key.endswith("_task")
-            ],
-            instructions=[script("echo 'Build finished'")],
-        ),
+            instructions=[
+                {"trigger_type": "manual"},
+                script("echo 'Build finished'"),
+            ]
+        )
     )
 
 
@@ -35,14 +51,28 @@ def main(ctx):
     ]
 
 
+def on_task_completed(ctx):
+    _maybe_trigger_manual_task(ctx)
+
+
+def on_task_aborted(ctx):
+    _maybe_trigger_manual_task(ctx)
+
+
 def on_task_failed(ctx):
+    if _check_for_intermittent_errors(ctx):
+        return
+    _maybe_trigger_manual_task(ctx)
+
+
+def _check_for_intermittent_errors(ctx):
     if ctx.payload.data.task.automaticReRun:
         print("Task is already an automatic re-run, let's not retry...")
-        return
+        return False
     instruction = failed_instruction(ctx.payload.data.task.id)
     if not instruction or not instruction["logsTail"]:
         print("Couldn't find any logs for last failed command.")
-        return
+        return False
 
     should_rerun = False
     logs = instruction["logsTail"]
@@ -79,3 +109,29 @@ def on_task_failed(ctx):
         print("Successfully re-ran task! Here is the new one: {}".format(new_task_id))
     else:
         print("Didn't find any transient issues in logs!")
+    return should_rerun
+
+
+def _maybe_trigger_manual_task(ctx):
+    if ctx.payload.data.task.name == _MANUAL_TASK_NAME:
+        return
+
+    data = execute(_GET_TASK_STATUSES_QUERY, {"build_id": ctx.payload.data.build.id})
+    task_id = None
+    for task in data["build"]["tasks"]:
+        if task["name"] == _MANUAL_TASK_NAME:
+            task_id = task["id"]
+        elif task["status"] in ("TRIGGERED", "SCHEDULED", "EXECUTING"):
+            return
+    if task_id == None:
+        fail("Couldn't find the {0!r} task!".format(_MANUAL_TASK_NAME))
+
+    execute(
+        _TASK_TRIGGER_MUTATION,
+        {"input": {"taskId": task_id, "clientMutationId": "trigger-" + task_id}},
+    )
+    print(
+        "Successfully triggered the {0!r} task! Here is the ID: {1}".format(
+            _MANUAL_TASK_NAME, task_id
+        )
+    )
