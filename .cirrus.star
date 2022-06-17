@@ -99,6 +99,8 @@ def _check_for_intermittent_errors(ctx):
                 or line.startswith("E: Failed to fetch")
                 # observed with chocolatey on Windows
                 or line.startswith(" The remote server returned an error:")
+                # observed with pip
+                or "Connection reset by peer" in line
             ):
                 should_rerun = True
                 break
