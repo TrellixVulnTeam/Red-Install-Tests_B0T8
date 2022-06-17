@@ -32,7 +32,7 @@ def _on_build_finish_task():
             env={"CIRRUS_SHELL": "sh"},
             instructions=[
                 {"trigger_type": "manual"},
-                script("echo 'Build finished'"),
+                script("clone", "echo 'Build finished'"),
             ]
         )
     )
