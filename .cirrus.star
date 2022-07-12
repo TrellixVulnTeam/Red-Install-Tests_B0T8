@@ -101,6 +101,8 @@ def _check_for_intermittent_errors(ctx):
                 or line.startswith(" The remote server returned an error:")
                 # observed with pip
                 or "Connection reset by peer" in line
+                # observed with pacman on Arch Linux
+                or line == "error: required key missing from keyring"
             ):
                 should_rerun = True
                 break
