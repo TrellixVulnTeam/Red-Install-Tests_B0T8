@@ -301,6 +301,14 @@ oracle_linux_8_task:
   install_sudo_script: |-
     dnf -y install sudo
   <<: *INSTALL_RED_ON_RHEL8_DERIVATIVES
+oracle_linux_9_task:
+  container:
+    image: oraclelinux:9
+    cpu: 1
+    memory: 2G
+  install_sudo_script: |-
+    dnf -y install sudo
+  <<: *INSTALL_RED_ON_RHEL9_DERIVATIVES
 
 raspberry_pi_os_10_armhf_task:
   arm_container:
@@ -341,6 +349,15 @@ rocky_linux_8_task:
     cpu: 1
     memory: 2G
   <<: *INSTALL_RED_ON_RHEL8_DERIVATIVES
+rocky_linux_9_task:
+  # FIXME: switch to compute_engine_instance once the image is available
+  container:
+    image: rockylinux:9
+    cpu: 1
+    memory: 2G
+  install_sudo_script: |-
+    dnf -y install sudo
+  <<: *INSTALL_RED_ON_RHEL9_DERIVATIVES
 
 ubuntu_1804_bionic_task:
   compute_engine_instance:
