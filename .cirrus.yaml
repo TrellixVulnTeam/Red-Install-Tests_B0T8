@@ -102,7 +102,15 @@ windows_task:
     CIRRUS_SHELL: cmd.exe
   install_instructions_script:
     # `ps:` doesn't include $ErrorActionPreference so gotta add it manually
+    # Also, gotta do this weird `trap` construct to actually cause this to exit
+    # with non-zero code because... PowerShell?
     - ps: |-
+        trap
+        {
+            $ErrorActionPreference = "Continue"
+            Write-Error $_
+            exit 1
+        }
         $ErrorActionPreference = "Stop"
         $ProgressPreference = "SilentlyContinue"
 
