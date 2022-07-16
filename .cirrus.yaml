@@ -101,30 +101,7 @@ windows_task:
   env:
     CIRRUS_SHELL: cmd.exe
   install_instructions_script:
-    # `ps:` doesn't include $ErrorActionPreference so gotta add it manually
-    # Also, gotta do this weird `trap` construct to actually cause this to exit
-    # with non-zero code because... PowerShell?
-    - ps: |-
-        trap
-        {
-            $ErrorActionPreference = "Continue"
-            Write-Error $_
-            exit 1
-        }
-        $ErrorActionPreference = "Stop"
-        $ProgressPreference = "SilentlyContinue"
-
-        Set-ExecutionPolicy Bypass -Scope Process -Force
-        [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-        iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-        # v-- stop log spam by disabling download progress (not part of instructions)
-        choco feature disable -n=showDownloadProgress
-        # ^-- stop log spam by disabling download progress (not part of instructions)
-        choco upgrade git --params "/GitOnlyOnPath /WindowsTerminal" -y
-        choco upgrade visualstudio2022-workload-vctools -y
-        choco upgrade python3 -y --version 3.9.13
-
-        choco upgrade temurin11 -y --version 11.0.14.10100
+    - powershell -File windows_install_instructions.ps1
   # Exit code detection in Windows cmd scripts only works when using a list.
   # The list of a single script instruction is still put in a single .cmd file
   # so all commands on a single list run in the same environment.
