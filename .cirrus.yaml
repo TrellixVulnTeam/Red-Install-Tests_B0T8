@@ -372,21 +372,6 @@ ubuntu_2004_focal_task:
 
     sudo apt -y install python3.9 python3.9-dev python3.9-venv python3-pip git openjdk-11-jre-headless build-essential nano
   <<: *INSTALL_RED_VENV39
-ubuntu_2110_rolling_task:
-  compute_engine_instance:
-    image_project: ubuntu-os-cloud
-    image: family/ubuntu-2110
-    cpu: 1
-    memory: 2G
-  install_instructions_script: |-
-    sudo apt update
-    sudo apt -y install software-properties-common
-    sudo add-apt-repository -yu ppa:git-core/ppa
-
-    sudo apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev libgdbm-dev uuid-dev python3-openssl git openjdk-11-jre-headless nano
-  env:
-    CXX: /usr/bin/g++
-  <<: *INSTALL_PYENV_AND_RED
 ubuntu_2204_jammy_task:
   compute_engine_instance:
     image_project: ubuntu-os-cloud
@@ -400,3 +385,19 @@ ubuntu_2204_jammy_task:
 
     sudo apt -y install python3.9 python3.9-dev python3.9-venv python3-pip git openjdk-11-jre-headless build-essential nano
   <<: *INSTALL_RED_VENV39
+ubuntu_devel_task:
+  container:
+    image: ubuntu:devel
+    cpu: 1
+    memory: 2G
+  install_sudo_script: |-
+    apt update
+    apt -y install sudo
+  install_instructions_script: |-
+    sudo apt update
+    sudo apt -y install software-properties-common
+    sudo add-apt-repository -yu ppa:git-core/ppa
+
+    sudo apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev libgdbm-dev uuid-dev python3-openssl git openjdk-11-jre-headless nano
+  env:
+    CXX: /usr/bin/g++
