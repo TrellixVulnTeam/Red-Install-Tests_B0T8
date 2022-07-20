@@ -1,0 +1,7 @@
+env:
+  CUSTOM_VAR: default value
+
+example_task:
+  container:
+    image: ubuntu:latest
+  script: echo "$CUSTOM_VAR"
