@@ -1,6 +1,9 @@
 env:
   CIRRUS_SHELL: bash -ileo pipefail
 
+only_if: $CIRRUS_TASK_NAME =~ $TASKS_TO_RUN
+skip: $CIRRUS_TASK_NAME =~ $TASKS_TO_SKIP
+
 install_red_venv39: &INSTALL_RED_VENV39
   install_red_script: |-
     python3.9 -m venv ~/redenv

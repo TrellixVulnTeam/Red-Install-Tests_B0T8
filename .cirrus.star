@@ -69,6 +69,7 @@ def main(ctx):
 
     return [
         ("env", {"RED_PACKAGE_NAME": package_name}),
+        _tasks_to_run_and_skip_env(),
         _on_build_finish_task(),
     ]
 
@@ -170,4 +171,25 @@ def _maybe_trigger_manual_task(ctx):
         "Successfully triggered the {0!r} task! Here is the ID: {1}".format(
             _MANUAL_TASK_NAME, task_id
         )
+    )
+
+
+def _tasks_to_run_and_skip_env():
+    to_run = []
+    to_skip = []
+    for key, value in TRAILERS:
+        if key == "CI-run-task":
+            to_run.append(value)
+        elif key == "CI-skip-task":
+            to_skip.append(value)
+    print("Trailers found:", TRAILERS)
+    print("to_run:", to_run)
+    print("to_skip:", to_skip)
+
+    return (
+        "env",
+        {
+            "TASKS_TO_RUN": "|".join(to_run) if to_run else ".*",
+            "TASKS_TO_SKIP": "|".join(to_skip) if to_skip else "$.",
+        },
     )
