@@ -23,6 +23,26 @@ mutation TaskTriggerMutation($input: TaskTriggerInput!) {
 }"""
 
 
+def _get_trailers():
+    commit_msg = env["CIRRUS_CHANGE_MESSAGE"].strip()
+    trailers = []
+    sections = commit_msg.rsplit("\n\n", 1)
+    if len(sections) < 2:
+        return trailers
+
+    for line in sections[1].splitlines():
+        key, sep, value = line.partition(": ")
+        if not (key and sep and value):
+            trailers.clear()
+            break
+        trailers.append((key.strip(), value.strip()))
+
+    return trailers
+
+
+TRAILERS = _get_trailers()
+
+
 def _on_build_finish_task():
     return (
         _MANUAL_TASK_NAME + "_task",
