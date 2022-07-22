@@ -134,12 +134,12 @@ almalinux_9_task:
   <<: *INSTALL_RED_ON_RHEL9_DERIVATIVES
 
 archlinux_task:
-  compute_engine_instance:
-    image_project: arch-linux-gce
-    image: family/arch
-    # For some reason, this image doesn't work with only one core assigned to it.
-    cpu: 2
+  container:
+    image: archlinux:latest
+    cpu: 1
     memory: 2G
+  install_sudo_script: |-
+    pacman --noconfirm -Syu sudo
   # makepkg can't be ran as root so we need to create builduser first
   create_builduser_script: |-
     useradd builduser -m
