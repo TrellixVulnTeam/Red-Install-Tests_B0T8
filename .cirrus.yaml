@@ -390,6 +390,9 @@ ubuntu_devel_task:
     image: ubuntu:devel
     cpu: 1
     memory: 2G
+  add_global_environment_script: |-
+    echo 'DEBIAN_FRONTEND=noninteractive' >> /etc/environment
+    echo 'TZ=Etc/UTC' >> /etc/environment
   install_sudo_script: |-
     apt update
     apt -y install sudo
