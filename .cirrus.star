@@ -41,9 +41,9 @@ def _on_build_finish_task():
 def main(ctx):
     package_name = "https://github.com/Cog-Creators/Red-DiscordBot/tarball/"
     if env["CIRRUS_BRANCH"] == "dev":
-        package_name += "V3/develop"
+        package_name += "V3/develop#egg=Red-DiscordBot"
     elif env["CIRRUS_BRANCH"].startswith("pull/"):
-        package_name += "refs/{0}/merge".format(env["CIRRUS_BRANCH"])
+        package_name += "refs/{0}/merge#egg=Red-DiscordBot".format(env["CIRRUS_BRANCH"])
     else:
         package_name = "Red-DiscordBot"
 

@@ -9,9 +9,9 @@ on:
 env:
   RED_PACKAGE_NAME: |-
     ${{
-      github.ref_name == 'dev' && 'https://github.com/Cog-Creators/Red-DiscordBot/tarball/V3/develop'
+      github.ref_name == 'dev' && 'https://github.com/Cog-Creators/Red-DiscordBot/tarball/V3/develop#egg=Red-DiscordBot'
       || startsWith(github.ref_name, 'pull/') && format(
-        'https://github.com/Cog-Creators/Red-DiscordBot/tarball/refs/{0}/merge',
+        'https://github.com/Cog-Creators/Red-DiscordBot/tarball/refs/{0}/merge#egg=Red-DiscordBot',
         github.ref_name
       )
       || 'Red-DiscordBot'
@@ -62,6 +62,9 @@ jobs:
       DEBIAN_FRONTEND: noninteractive
 
     steps:
+      # Clone Red-Install-Tests repository
+      - uses: actions/checkout@v3
+
       # Installing requirements
       - name: Run install instructions (Linux/Mac)
         id: install_linux
@@ -82,3 +85,11 @@ jobs:
 
           python -m pip install -U pip setuptools wheel
           python -m pip install -U "$RED_PACKAGE_NAME"
+
+      - name: Run tests inside venv on Python 3.9.
+        if: >-
+          matrix.venv_method == 'venv39'
+        shell: bash -leo pipefail {0}
+        run: |-
+          source ~/redenv/bin/activate
+          python ./run_tests.py

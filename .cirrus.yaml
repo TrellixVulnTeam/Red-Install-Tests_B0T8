@@ -11,6 +11,9 @@ install_red_venv39: &INSTALL_RED_VENV39
     python -m pip install -U "$RED_PACKAGE_NAME[postgres]"
 
     ./check_java_version.py 11
+  test_red_script: |-
+    source ~/redenv/bin/activate
+    ./run_tests.py
 install_pyenv_and_red: &INSTALL_PYENV_AND_RED
   install_pyenv_script: |-
     command -v pyenv && pyenv update || curl https://pyenv.run | bash
@@ -34,6 +37,9 @@ install_pyenv_and_red: &INSTALL_PYENV_AND_RED
     python -m pip install -U "$RED_PACKAGE_NAME[postgres]"
 
     ./check_java_version.py 11
+  test_red_script: |-
+    pyenv shell redbot
+    ./run_tests.py
 install_pyenv_and_red38: &INSTALL_PYENV_AND_RED38
   install_pyenv_script: |-
     command -v pyenv && pyenv update || curl https://pyenv.run | bash
@@ -57,6 +63,9 @@ install_pyenv_and_red38: &INSTALL_PYENV_AND_RED38
     python -m pip install -U "$RED_PACKAGE_NAME[postgres]"
 
     ./check_java_version.py 11
+  test_red_script: |-
+    pyenv shell redbot
+    ./run_tests.py
 
 install_red_on_rhel8_derivatives: &INSTALL_RED_ON_RHEL8_DERIVATIVES
   install_instructions_script: |-
@@ -115,6 +124,9 @@ windows_task:
 
     - python -m pip install -U pip setuptools wheel
     - python -m pip install -U "%RED_PACKAGE_NAME%[postgres]"
+  test_red_script:
+    - '"%userprofile%\redenv\Scripts\activate.bat"'
+    - python ./run_tests.py
 
 almalinux_8_task:
   compute_engine_instance:
@@ -202,6 +214,7 @@ debian_10_buster_task:
     sudo apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev libgdbm-dev uuid-dev python3-openssl git openjdk-11-jre-headless nano
   env:
     CXX: /usr/bin/g++
+    RED_SKIP_TESTS: Git version on Debian 10 is too old for the test suite.
   <<: *INSTALL_PYENV_AND_RED
 debian_11_bullseye_task:
   compute_engine_instance:
@@ -308,6 +321,7 @@ raspberry_pi_os_10_armhf_task:
     sudo apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev libgdbm-dev uuid-dev python3-openssl git openjdk-11-jre-headless nano
   env:
     CXX: /usr/bin/g++
+    RED_SKIP_TESTS: Git version on Debian 10 is too old for the test suite.
   <<: *INSTALL_PYENV_AND_RED38
 raspberry_pi_os_11_armhf_task: &RASPBERRY_PI_OS_11
   arm_container:
