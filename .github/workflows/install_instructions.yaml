@@ -55,6 +55,18 @@ jobs:
               brew tap homebrew/cask-versions
               brew install --cask temurin11
             venv_method: "venv39"
+          - os: macos-12
+            run: |-
+              /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+              brew upgrade
+              brew install python@3.9
+              echo 'export PATH="/usr/local/opt/python@3.9/bin:$PATH"' >> ~/.bash_profile
+              source ~/.bash_profile
+              brew install git
+              brew tap homebrew/cask-versions
+              brew install --cask temurin11
+            venv_method: "venv39"
 
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
     container: ${{ matrix.container }}
