@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import asyncio
 import os
+import shutil
 import subprocess
 import sys
 import tarfile
@@ -8,7 +9,6 @@ from io import BytesIO
 
 import aiohttp
 import redbot
-
 
 
 async def main() -> None:
@@ -39,6 +39,7 @@ async def main() -> None:
             with tarfile.open(fileobj=fp, mode="r|gz") as tar:
                 tar.extractall()
                 os.chdir(os.listdir()[0])
+                shutil.rmtree("redbot")
 
     for args in (
         (sys.executable, "-m", "pip", "install", "-U", f"{package_name}[test]"),
