@@ -112,9 +112,12 @@ def _check_for_intermittent_errors(ctx):
         for line in logs:
             # Observed while trying to build Python with install_instructions on Arch Linux
             # as well as with install_python_with_pyenv on OSes that use pyenv.
-            if "curl: (56)" in line:
-                should_rerun = True
-                break
+            start = line.find("curl: (")
+            if start != -1:
+                errno = int(line[start + 7 : line.find(")", start)])
+                if errno in (6, 7, 28, 55, 56):
+                    should_rerun = True
+                    break
 
     if should_rerun:
         print("Found failed log line indicating a transient issue!")
