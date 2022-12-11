@@ -214,7 +214,6 @@ debian_10_buster_task:
     sudo apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev libgdbm-dev uuid-dev python3-openssl git openjdk-11-jre-headless nano
   env:
     CXX: /usr/bin/g++
-    RED_SKIP_TESTS: Git version on Debian 10 is too old for the test suite.
   <<: *INSTALL_PYENV_AND_RED
 debian_11_bullseye_task:
   compute_engine_instance:
@@ -303,7 +302,6 @@ raspberry_pi_os_10_armhf_task:
     sudo apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev libgdbm-dev uuid-dev python3-openssl git openjdk-11-jre-headless nano
   env:
     CXX: /usr/bin/g++
-    RED_SKIP_TESTS: Git version on Debian 10 is too old for the test suite.
   <<: *INSTALL_PYENV_AND_RED38
 raspberry_pi_os_11_armhf_task: &RASPBERRY_PI_OS_11
   arm_container:

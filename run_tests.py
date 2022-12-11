@@ -41,6 +41,21 @@ async def main() -> None:
                 os.chdir(os.listdir()[0])
                 shutil.rmtree("redbot")
 
+    fast_import_path = (
+        f"{os.path.dirname(redbot.__file__)}/pytest/downloader_testrepo.export"
+    )
+
+    # remove original-oid lines from git fast-import file as it doesn't work on Debian 10
+    with open(fast_import_path, newline="\n") as fp:
+        lines = []
+        for line in fp:
+            if not line.startswith("original-oid "):
+                lines.append(line)
+
+    with open(fast_import_path, "w", newline="\n") as fp:
+        for line in lines:
+            fp.write(line)
+
     for args in (
         (sys.executable, "-m", "pip", "install", "-U", f"{package_name}[test]"),
         (sys.executable, "-m", "pytest"),
